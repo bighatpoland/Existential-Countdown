@@ -1,5 +1,3 @@
-import '@testing-library/jest-native/extend-expect';
-
 // Mock Expo modules
 jest.mock('expo-notifications', () => ({
   requestPermissionsAsync: jest.fn(),
