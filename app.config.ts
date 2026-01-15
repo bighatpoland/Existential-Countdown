@@ -5,6 +5,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   name: 'Existential Countdown',
   slug: 'existential-countdown',
   version: '1.0.0',
+  scheme: 'existentialcountdown',
   assetBundlePatterns: ['**/*'],
   ios: {
     supportsTablet: true,
@@ -15,6 +16,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: '#000000',
     },
     package: 'com.existentialcountdown.app',
+  },
+  web: {
+    bundler: 'metro',
   },
   plugins: [
     [
