@@ -21,6 +21,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     bundler: 'metro',
   },
   plugins: [
+    'expo-router',
     [
       'expo-notifications',
       {
