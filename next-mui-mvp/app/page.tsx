@@ -55,6 +55,7 @@ const defaultAssumptions: Assumptions = {
 
 export default function HomePage() {
   const theme = useTheme();
+  const [mounted, setMounted] = React.useState(false);
   const isDesktop = useMediaQuery(theme.breakpoints.up("md"), { noSsr: true });
   const { mode, toggleColorMode } = React.useContext(ColorModeContext);
 
@@ -71,6 +72,10 @@ export default function HomePage() {
     null
   );
   const [snapshots, setSnapshots] = React.useState<Snapshot[]>([]);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   React.useEffect(() => {
     const saved = loadAssumptions();
@@ -121,6 +126,10 @@ export default function HomePage() {
   const coffeesLeft = getCoffeesLeft(assumptions);
   const sundaysRemaining = getSundaysRemaining(assumptions);
   const nextWeekRemaining = getNextWeekStartRemaining(assumptions);
+
+  if (!mounted) {
+    return <Box sx={{ minHeight: "100vh" }} />;
+  }
 
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
