@@ -58,6 +58,9 @@ export default function AssumptionsPanel({ value, onChange }: AssumptionsPanelPr
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       <Typography variant="h6">Settings</Typography>
+      <Typography variant="caption" color="text.secondary">
+        Data is stored in LocalStorage so your assumptions survive reloads — like your regrets.
+      </Typography>
       <TextField
         label="Age"
         type="number"

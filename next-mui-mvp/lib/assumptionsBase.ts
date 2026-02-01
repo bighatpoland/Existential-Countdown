@@ -218,6 +218,14 @@ export const assumptionsBase: LifeAssumption[] = [
     affectedBy: ["habits"]
   },
   {
+    id: "next-week-start",
+    label: "Next week I’ll start",
+    unit: "weeks postponed",
+    description: "Powered by optimistic delusion.",
+    calculationHint: "remainingWeeks × optimismFactor",
+    affectedBy: ["optimism"]
+  },
+  {
     id: "plans-almost-made",
     label: "Plans almost made",
     unit: "plans",
@@ -232,6 +240,14 @@ export const assumptionsBase: LifeAssumption[] = [
     description: "Estimated from remaining years and routine pacing.",
     calculationHint: "remainingYears × 20 × lifestyleFactor",
     affectedBy: ["lifestyle", "age"]
+  },
+  {
+    id: "sundays-remaining",
+    label: "Sundays remaining",
+    unit: "Sundays",
+    description: "Because weekends are a finite resource.",
+    calculationHint: "remainingWeeks × 1",
+    affectedBy: ["age"]
   },
   {
     id: "mondays-anticipated",
