@@ -52,6 +52,8 @@ type MetricId = 'coffees' | 'sundays' | 'next-week';
 type Assumptions = {
   age: number;
   lifeExpectancyMode: LifeExpectancyMode;
+  healthCondition: number;
+  eatingHabits: number;
   coffeesPerDay: number;
   optimism: number;
   unitMode: UnitMode;
@@ -71,6 +73,8 @@ const SNAPSHOT_KEY = 'existentialCountdown.snapshots.v1';
 const defaultAssumptions: Assumptions = {
   age: 30,
   lifeExpectancyMode: 'average',
+  healthCondition: 3,
+  eatingHabits: 3,
   coffeesPerDay: 2,
   optimism: 6,
   unitMode: 'weekly',
@@ -81,6 +85,28 @@ const LIFE_EXPECTANCY: Record<LifeExpectancyMode, number> = {
   short: 70,
   average: 80,
   optimistic: 90,
+};
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.min(max, Math.max(min, value));
+
+const getHealthDeltaYears = (healthCondition: number) => {
+  const clamped = clamp(healthCondition, 1, 5);
+  return (clamped - 3) * 2;
+};
+
+const getEatingHabitsDeltaYears = (eatingHabits: number) => {
+  const clamped = clamp(eatingHabits, 1, 5);
+  return (clamped - 3) * 1.5;
+};
+
+const getAdjustedLifeExpectancy = (assumptions: Assumptions) => {
+  const base = LIFE_EXPECTANCY[assumptions.lifeExpectancyMode];
+  const adjusted =
+    base +
+    getHealthDeltaYears(assumptions.healthCondition) +
+    getEatingHabitsDeltaYears(assumptions.eatingHabits);
+  return clamp(Math.round(adjusted), 50, 105);
 };
 
 const formatNumber = (value: number) => Math.floor(value).toLocaleString('en-US');
@@ -225,7 +251,7 @@ export default function App() {
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
   const toneCopy = getMicrocopy(assumptions.absurdity);
 
-  const lifeExpectancy = LIFE_EXPECTANCY[assumptions.lifeExpectancyMode];
+  const lifeExpectancy = getAdjustedLifeExpectancy(assumptions);
   const yearsRemaining = Math.max(0, lifeExpectancy - assumptions.age);
   const daysRemaining = yearsRemaining * 365.25;
   const weeksRemaining = yearsRemaining * 52.1429;
@@ -333,7 +359,7 @@ export default function App() {
   const renderAssumptionsPanel = () => (
     <Stack spacing={2} sx={{ p: 3 }}>
       <Stack spacing={0.5}>
-        <Typography variant="h6">Assumptions</Typography>
+        <Typography variant="h6">Settings</Typography>
         <Typography variant="body2" color="text.secondary">
           Updates apply instantly.
         </Typography>
@@ -352,6 +378,55 @@ export default function App() {
         }
         fullWidth
       />
+
+      <Stack spacing={1}>
+        <Typography variant="subtitle2">Health condition (1–5)</Typography>
+        <Slider
+          value={assumptions.healthCondition}
+          min={1}
+          max={5}
+          step={1}
+          marks
+          valueLabelDisplay="auto"
+          onChange={(_, value) =>
+            setAssumptions((prev) => ({
+              ...prev,
+              healthCondition: Array.isArray(value) ? value[0] : value,
+            }))
+          }
+        />
+      </Stack>
+
+      <Stack spacing={1}>
+        <Typography variant="subtitle2">Eating habits</Typography>
+        <Slider
+          value={assumptions.eatingHabits}
+          min={1}
+          max={5}
+          step={1}
+          marks
+          valueLabelDisplay="auto"
+          onChange={(_, value) =>
+            setAssumptions((prev) => ({
+              ...prev,
+              eatingHabits: Array.isArray(value) ? value[0] : value,
+            }))
+          }
+        />
+      </Stack>
+
+      <Typography variant="body2" color="text.secondary">
+        Adjusted life expectancy: {getAdjustedLifeExpectancy(assumptions)}
+      </Typography>
+
+      <Divider />
+
+      <Stack spacing={0.5}>
+        <Typography variant="h6">Assumptions</Typography>
+        <Typography variant="body2" color="text.secondary">
+          Updates apply instantly.
+        </Typography>
+      </Stack>
 
       <Stack spacing={1}>
         <Typography variant="subtitle2">Life expectancy</Typography>
