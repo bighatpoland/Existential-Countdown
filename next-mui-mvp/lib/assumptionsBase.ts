@@ -1,4 +1,4 @@
-import { LifeAssumption } from "../types";
+import type { LifeAssumption } from "../types";
 
 export const assumptionsBase: LifeAssumption[] = [
   {
