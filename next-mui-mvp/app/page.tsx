@@ -256,19 +256,28 @@ export default function HomePage() {
                 <Typography variant="subtitle1" color="text.secondary">
                   Assumptions base
                 </Typography>
-                <Grid container spacing={2}>
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: {
+                      xs: "1fr",
+                      sm: "repeat(2, minmax(0, 1fr))",
+                      md: "repeat(3, minmax(0, 1fr))"
+                    },
+                    gap: 2
+                  }}
+                >
                   {assumptionSet.map((item) => (
-                    <Grid item xs={12} sm={4} key={item.id}>
-                      <AssumptionCard
-                        label={item.label}
-                        value={getAssumptionValue(assumptions, item)}
-                        unit={item.unit}
-                        description={item.description}
-                        onOpen={() => handleOpenAssumptionDetails(item)}
-                      />
-                    </Grid>
+                    <AssumptionCard
+                      key={item.id}
+                      label={item.label}
+                      value={getAssumptionValue(assumptions, item)}
+                      unit={item.unit}
+                      description={item.description}
+                      onOpen={() => handleOpenAssumptionDetails(item)}
+                    />
                   ))}
-                </Grid>
+                </Box>
               </Stack>
 
               <Box>
